@@ -19,6 +19,7 @@ struct SettingsView: View {
                 } footer: {
                     Text("Doses are spread evenly between your first and last drop.")
                 }
+                if UnlockStore.monetizationEnabled {
                 Section {
                     if store.isUnlocked {
                         Label("DropClock Full unlocked", systemImage: "checkmark.seal.fill")
@@ -26,6 +27,7 @@ struct SettingsView: View {
                         Button("Unlock all features") { showingPaywall = true }
                     }
                     Button("Restore purchase") { Task { await store.restore() } }
+                }
                 }
                 Section {
                     Text("DropClock is a reminder tool. Always follow your doctor's instructions.")

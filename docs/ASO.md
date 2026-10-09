@@ -1,4 +1,6 @@
-# DropClock App Store copy (v0.1 draft)
+# DropClock App Store copy (free launch)
+
+Paid copy (one-time purchase) is in git history (commit fac6349) for when payments are turned on.
 
 Character limits checked: name ≤30, subtitle ≤30, keywords ≤100, promo ≤170.
 Keywords must not repeat words already in the name/subtitle (Apple indexes those already).
@@ -8,7 +10,7 @@ Keywords must not repeat words already in the name/subtitle (Apple indexes those
 - **Name (28):** DropClock: Eye Drop Reminder
 - **Subtitle (26):** Cataract, LASIK & Glaucoma
 - **Keywords (99):** eyedrops,alarm,schedule,postop,surgery,medication,tracker,log,taper,prk,iop,pressure,pet,dog,vision
-- **Promotional text (160):** Reminders that actually ring. Taper schedules after cataract or LASIK surgery, 5-minute spacing between drops, and a log for your eye doctor. One-time purchase.
+- **Promotional text:** Reminders that actually ring. Taper schedules after cataract or LASIK surgery, 5-minute spacing between drops, and a log for your eye doctor. Free, no ads.
 
 **Description**
 
@@ -32,8 +34,8 @@ MADE FOR
 PRIVATE BY DESIGN
 No account, no server. Your data stays on your iPhone.
 
-PRICING
-Free for one drop. Unlock unlimited drops, both-eye schedules, and tapers with a single one-time purchase. No subscription.
+FREE
+No ads, no account, no subscription.
 
 DropClock is a reminder tool and does not provide medical advice. Always follow your doctor's instructions.
 
@@ -42,7 +44,7 @@ DropClock is a reminder tool and does not provide medical advice. Always follow 
 - **名前 (21):** DropClock 目薬アラーム・点眼記録
 - **サブタイトル (16):** 白内障・緑内障の点眼スケジュール
 - **キーワード:** 点眼アラーム,術後,手術,眼圧,服薬管理,リマインダー,通知,タイマー,レーシック,ドライアイ,お薬手帳,ペット,犬,カレンダー,記録帳
-- **プロモーションテキスト (73):** ちゃんと鳴る点眼アラーム。白内障・レーシック術後の減量スケジュール、目薬の5分間隔を自動設定、通院時に見せられる点眼記録。買い切りでサブスクなし。
+- **プロモーションテキスト:** ちゃんと鳴る点眼アラーム。白内障・レーシック術後の減量スケジュール、目薬の5分間隔を自動設定、通院時に見せられる点眼記録。無料・広告なし。
 
 **説明文**
 
@@ -67,6 +69,6 @@ DropClockが選ばれる理由
 アカウント登録・サーバー不要。データはiPhoneの中だけに保存されます。
 
 料金
-目薬1つまで無料。買い切りの1回購入で、目薬の数無制限・両目管理・減量スケジュールが使えます。サブスクリプションはありません。
+無料。広告・アカウント登録・サブスクリプションはありません。
 
 DropClockはリマインダーアプリであり、医療上の助言は行いません。必ず医師の指示に従ってください。
