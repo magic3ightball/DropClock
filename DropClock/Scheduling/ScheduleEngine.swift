@@ -75,23 +75,35 @@ enum ScheduleEngine {
     /// All doses for one calendar day, sorted, with different medications pushed apart by `spacingMinutes`.
     static func doses(on day: Date, specs: [MedicationSpec], settings: ScheduleSettings = .init(), calendar: Calendar = .current) -> [PlannedDose] {
         let midnight = calendar.startOfDay(for: day)
-        var raw: [(minutes: Int, order: Int, id: String)] = []
+        // Same drug entered once per eye (e.g. second cataract surgery) should share a time slot
+        // instead of being pushed 5 minutes apart, so group by name using the lowest sortOrder.
+        var groupOrder: [String: Int] = [:]
+        for spec in specs {
+            let key = spec.name.lowercased()
+            groupOrder[key] = min(groupOrder[key] ?? spec.sortOrder, spec.sortOrder)
+        }
+        var raw: [(minutes: Int, group: Int, key: String, id: String)] = []
         for spec in specs {
             guard let phase = activePhase(for: spec, on: day, calendar: calendar) else { continue }
+            let key = spec.name.lowercased()
             for m in baseMinutes(count: phase.timesPerDay, settings: settings) {
-                raw.append((m, spec.sortOrder, spec.id))
+                raw.append((m, groupOrder[key] ?? spec.sortOrder, key, spec.id))
             }
         }
-        raw.sort { ($0.minutes, $0.order, $0.id) < ($1.minutes, $1.order, $1.id) }
+        raw.sort { ($0.minutes, $0.group, $0.key, $0.id) < ($1.minutes, $1.group, $1.key, $1.id) }
 
         var result: [PlannedDose] = []
-        var lastMinutes: Int? = nil
+        var last: (minutes: Int, original: Int, key: String)? = nil
         for item in raw {
             var m = item.minutes
-            if let last = lastMinutes, m < last + settings.spacingMinutes {
-                m = last + settings.spacingMinutes
+            if let prev = last {
+                if prev.key == item.key && prev.original == item.minutes {
+                    m = prev.minutes
+                } else if m < prev.minutes + settings.spacingMinutes {
+                    m = prev.minutes + settings.spacingMinutes
+                }
             }
-            lastMinutes = m
+            last = (m, item.minutes, item.key)
             if let time = calendar.date(byAdding: .minute, value: m, to: midnight) {
                 result.append(PlannedDose(medicationID: item.id, time: time))
             }

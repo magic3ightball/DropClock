@@ -94,6 +94,22 @@ final class Medication {
     }
 }
 
+/// Eye pressure (IOP) measured at the clinic, in mmHg. Mostly used by glaucoma patients.
+@Model
+final class EyePressureReading {
+    var date: Date = Date()
+    var left: Double?
+    var right: Double?
+    var note: String = ""
+
+    init(date: Date, left: Double?, right: Double?, note: String = "") {
+        self.date = date
+        self.left = left
+        self.right = right
+        self.note = note
+    }
+}
+
 @Model
 final class DoseLog {
     /// The planned time this log answers. Lets us match a log to a dose in the schedule.

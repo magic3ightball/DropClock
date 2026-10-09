@@ -21,7 +21,7 @@ struct DropClockApp: App {
 enum AppData {
     static let container: ModelContainer = {
         do {
-            return try ModelContainer(for: Medication.self, DoseLog.self)
+            return try ModelContainer(for: Medication.self, DoseLog.self, EyePressureReading.self)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

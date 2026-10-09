@@ -42,8 +42,11 @@ struct MedicationsView: View {
                 } label: { Image(systemName: "plus") }
                 .accessibilityLabel(Text("Add drop"))
             }
-            .sheet(isPresented: $showingNew) { MedicationEditView(medication: nil, nextSortOrder: meds.count) }
-            .sheet(item: $editing) { MedicationEditView(medication: $0, nextSortOrder: meds.count) }
+            .sheet(isPresented: $showingNew) {
+                MedicationEditView(medication: nil, nextSortOrder: meds.count,
+                                   allowSplitEyes: store.canAddMedication(currentCount: meds.count + 1))
+            }
+            .sheet(item: $editing) { MedicationEditView(medication: $0, nextSortOrder: meds.count, allowSplitEyes: false) }
             .sheet(isPresented: $showingPaywall) { PaywallView() }
         }
     }
@@ -64,12 +67,17 @@ struct MedicationEditView: View {
 
     let medication: Medication?
     let nextSortOrder: Int
+    /// Splitting creates two entries, so free users at the limit cannot use it.
+    let allowSplitEyes: Bool
 
     @State private var name = ""
     @State private var cap: CapColor = .white
     @State private var eye: EyeSide = .both
     @State private var start = Date()
     @State private var phases: [TaperPhase] = [TaperPhase(timesPerDay: 4, days: 7)]
+    @State private var splitEyes = false
+    @State private var firstEye: EyeSide = .right
+    @State private var secondStart = Calendar.current.date(byAdding: .day, value: 14, to: Date()) ?? Date()
 
     var body: some View {
         NavigationStack {
@@ -80,6 +88,26 @@ struct MedicationEditView: View {
                         ForEach(EyeSide.allCases) { Text($0.label).tag($0) }
                     }
                     .pickerStyle(.segmented)
+                }
+                if medication == nil && eye == .both {
+                    Section {
+                        Toggle("Second eye starts on a different date", isOn: $splitEyes)
+                            .disabled(!allowSplitEyes)
+                        if splitEyes {
+                            Picker("First eye", selection: $firstEye) {
+                                Text(EyeSide.right.label).tag(EyeSide.right)
+                                Text(EyeSide.left.label).tag(EyeSide.left)
+                            }
+                            .pickerStyle(.segmented)
+                            DatePicker("Second eye starts", selection: $secondStart, in: start..., displayedComponents: .date)
+                        }
+                    } footer: {
+                        if allowSplitEyes {
+                            Text("For surgery on one eye first and the other a few weeks later. The same schedule restarts for the second eye.")
+                        } else {
+                            Text("Unlock DropClock Full to schedule each eye separately.")
+                        }
+                    }
                 }
                 Section("Cap color") {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 6), spacing: 12) {
@@ -133,6 +161,10 @@ struct MedicationEditView: View {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         if let m = medication {
             m.name = trimmed; m.capColor = cap; m.eye = eye; m.startDate = start; m.phases = phases
+        } else if eye == .both && splitEyes && allowSplitEyes {
+            let secondEye: EyeSide = firstEye == .right ? .left : .right
+            context.insert(Medication(name: trimmed, capColor: cap, eye: firstEye, startDate: start, phases: phases, sortOrder: nextSortOrder))
+            context.insert(Medication(name: trimmed, capColor: cap, eye: secondEye, startDate: secondStart, phases: phases, sortOrder: nextSortOrder + 1))
         } else {
             context.insert(Medication(name: trimmed, capColor: cap, eye: eye, startDate: start, phases: phases, sortOrder: nextSortOrder))
         }

@@ -12,14 +12,15 @@ Done
 - `UnlockStore`: StoreKit 2 one-time unlock (`com.magic3ightball.dropclock.unlock`), 1 drop free
 - Localization: English, Japanese, Korean (`Localizable.xcstrings`)
 - App Store copy draft: `docs/ASO.md`
+- App icon 1024px (no alpha)
+- "Second eye starts on a different date" (creates one entry per eye; same drug in both eyes shares a time slot)
+- A4 PDF report for the eye doctor (current drops, daily adherence, eye pressure), paid feature
+- Eye pressure (IOP) log with Swift Charts line chart
 
 Next
 - [ ] Set Team in Signing & Capabilities, add Time Sensitive Notifications capability
-- [ ] App icon (1024px) in `Assets.xcassets/AppIcon`
 - [ ] StoreKit configuration file for local purchase testing
-- [ ] Separate schedules per eye with different start dates (done via one entry per eye for now)
-- [ ] PDF report for the eye doctor (History tab, replace CSV)
-- [ ] Glaucoma IOP log (Japan)
+- [ ] Test PDF output and notifications on a real device
 - [ ] iOS 26+: AlarmKit alarms that break through Silent/Focus
 - [ ] Unit tests for ScheduleEngine
 
